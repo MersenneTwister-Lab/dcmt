@@ -1,3 +1,6 @@
+version 0.6.2
+ "-fPIC" option is added to Makefile in "lib" directory.
+
 version 0.6.1b
  License is changed to BSD.
 

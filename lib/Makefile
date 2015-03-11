@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wmissing-prototypes -O3 -std=c99 -I../include
+CFLAGS = -Wall -Wmissing-prototypes -O3 -std=c99 -fPIC -I../include
 OBJS = check32.o prescr.o mt19937.o eqdeg.o seive.o genmtrand.o init.o
 
 lib : $(OBJS)
