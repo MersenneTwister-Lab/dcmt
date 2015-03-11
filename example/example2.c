@@ -34,9 +34,9 @@ int main(void)
 	sgenrand_mt(4567, mts1);
 	sgenrand_mt(8901, mts2);
 	for (i=0; i<10; i++) {
-		printf("%8x ", genrand_mt(mts0));
-		printf("%8x ", genrand_mt(mts1));
-		printf("%8x ", genrand_mt(mts2));
+		printf("%8"PRIx32" ", genrand_mt(mts0));
+		printf("%8"PRIx32" ", genrand_mt(mts1));
+		printf("%8"PRIx32" ", genrand_mt(mts2));
 	    printf("\n");
     /* print output of mts0, mts1, mts2, ten times */
 	}

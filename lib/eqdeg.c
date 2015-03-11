@@ -101,7 +101,7 @@ static void delete_MaskNodes(MaskNode *head);
 static MaskNode *delete_lower_MaskNodes(MaskNode *head, int l);
 static MaskNode *cons_MaskNode(MaskNode *head, uint32_t b, uint32_t c, int leng);
 /* static void count_MaskNodes(MaskNode *head); */
-static void next_state(eqdeg_t *eq, Vector *v);
+static void next_state(eqdeg_t *eq, Vector *v, int *count);
 
 #if defined(DEBUG)
 static void show_distrib(eqdeg_t *eq, mt_struct *mts);
@@ -386,15 +386,15 @@ static int pivot_reduction(eqdeg_t *eq, int v)
 	}
 	add(eq->nnn, lattice[v], lattice[pivot]);
 	if (lattice[v]->next == 0) {
-	    next_state(eq, lattice[v]);
+	    count = 0;
+	    next_state(eq, lattice[v], &count);
 	    if (lattice[v]->next == 0) {
 		if (is_zero(eq->nnn, lattice[v])) {
 		    break;
 		}
-		count = 0;
 		while (lattice[v]->next == 0) {
 		    count++;
-		    next_state(eq, lattice[v]);
+		    next_state(eq, lattice[v], &count);
 		    if (count > eq->nnn * (eq->www-1) - eq->rrr) {
 			break;
 		    }
@@ -481,6 +481,7 @@ static void add(int nnn, Vector *u, Vector *v)
 static Vector **make_lattice(eqdeg_t *eq, int v)
 {
     int i;
+    int count;
     Vector **lattice, *bottom;
 
     lattice = (Vector **)malloc( (v+1) * sizeof( Vector *) );
@@ -498,32 +499,41 @@ static Vector **make_lattice(eqdeg_t *eq, int v)
 
     bottom = new_Vector(eq->nnn); /* last row */
     for(i=0; i< eq->nnn; i++) {
-	bottom->cf[i] = 0xccccccccU; /* anythin but 0 is OK. */
-	bottom->cf[i] &= eq->greal_mask;
+	bottom->cf[i] = 0;
     }
+    bottom->cf[eq->nnn -1] = 0xc0000000 & eq->greal_mask;
     bottom->start = 0;
     bottom->count = 0;
-    next_state(eq, bottom);
+    count = 0;
+    do {
+	next_state(eq, bottom, &count);
+    } while (bottom->next == 0);
 //    degree_of_vector(eq, top );
     lattice[v] = bottom;
 
     return lattice;
 }
 
-static void next_state(eqdeg_t *eq, Vector *v) {
+static void next_state(eqdeg_t *eq, Vector *v, int *count) {
     uint32_t tmp;
 
-    tmp = ( v->cf[v->start] & eq->gupper_mask )
-	| ( v->cf[(v->start + 1) % eq->nnn] & eq->glower_mask );
-    v->cf[v->start] = v->cf[(v->start + eq->mmm) % eq->nnn]
-	^ ( (tmp>>1) ^ eq->aaa[lsb(eq, tmp)] );
-    v->cf[v->start] &= eq->greal_mask;
-    tmp = v->cf[v->start];
-    v->start = (v->start + 1) % eq->nnn;
-    v->count++;
-    tmp = trnstmp(eq, tmp);
-    tmp = masktmp(eq, tmp);
-    v->next = tmp & eq->upper_v_bits;
+    do {
+	tmp = ( v->cf[v->start] & eq->gupper_mask )
+	    | ( v->cf[(v->start + 1) % eq->nnn] & eq->glower_mask );
+	v->cf[v->start] = v->cf[(v->start + eq->mmm) % eq->nnn]
+	    ^ ( (tmp>>1) ^ eq->aaa[lsb(eq, tmp)] );
+	v->cf[v->start] &= eq->greal_mask;
+	tmp = v->cf[v->start];
+	v->start = (v->start + 1) % eq->nnn;
+	v->count++;
+	tmp = trnstmp(eq, tmp);
+	tmp = masktmp(eq, tmp);
+	v->next = tmp & eq->upper_v_bits;
+	(*count)++;
+	if (*count > eq->nnn * (eq->www-1) - eq->rrr) {
+	    break;
+	}
+    } while (v->next == 0);
 }
 
 /***********/

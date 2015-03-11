@@ -1,3 +1,7 @@
+version 0.6.1
+ speed improvement using zero-excess initial state. (2010/1/15)
+ change print format specifier (2010/1/20)
+
 version 0.6
  All global variables are moved into structures. (thread safe or thread independent) (2009/12/15)
  lenstra algorithm is replaced by pivot_reduction algorithm. (2009/12/15)

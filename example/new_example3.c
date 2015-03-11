@@ -20,17 +20,17 @@ int main(void)
     /* start_id = 3, max_id = 5 */
     mtss = get_mt_parameters_st(32,521,3,5,4172, &count);
     if (mtss == NULL) {
-	printf ("error\n");
-	return 1;
+        printf ("error\n");
+        return 1;
     }
     for (i = 0; i < count; i++) {
-	sgenrand_mt(seed[i], mtss[i]);
+        sgenrand_mt(seed[i], mtss[i]);
     }
     for (i=0; i<10; i++) {
-	for (j = 0; j < count; j++) {
-	    printf("%8x ", genrand_mt(mtss[j]));
-	}
-	printf("\n");
+        for (j = 0; j < count; j++) {
+            printf("%8"PRIx32" ", genrand_mt(mtss[j]));
+        }
+        printf("\n");
     }
     free_mt_struct_array(mtss, count);
     return 0;

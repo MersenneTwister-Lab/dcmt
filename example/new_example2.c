@@ -14,35 +14,35 @@ int main(void)
 
     /* This trys to find three independent small Mersenne Twisters
        with period 2^521-1. */
-	printf ("get first MT\n");
-	mts0 = get_mt_parameter_id_st(32,521,0,4172);  /* id=0 */
+        printf ("get first MT\n");
+        mts0 = get_mt_parameter_id_st(32,521,0,4172);  /* id=0 */
     if (mts0 == NULL) {
-	printf ("error\n"); return 0; /* if did not find */
+        printf ("error\n"); return 0; /* if did not find */
     }
-	printf ("get second MT\n");
-	mts1 = get_mt_parameter_id_st(32,521,1,4172);  /* id=1 */
+        printf ("get second MT\n");
+        mts1 = get_mt_parameter_id_st(32,521,1,4172);  /* id=1 */
     if (mts1 == NULL) {
-	printf ("error\n"); return 0;
+        printf ("error\n"); return 0;
     }
-	printf ("get third MT\n");
-	mts2 = get_mt_parameter_id_st(32,521,999,4172);
-	/* id may be any=16bit integers, e.g. id=999 */
+        printf ("get third MT\n");
+        mts2 = get_mt_parameter_id_st(32,521,999,4172);
+        /* id may be any=16bit integers, e.g. id=999 */
     if (mts2 == NULL) {
-	printf ("error\n"); return 0;
+        printf ("error\n"); return 0;
     }
-	sgenrand_mt(1234, mts0); /* initialize mts0 with seed 1234 */
-	sgenrand_mt(4567, mts1);
-	sgenrand_mt(8901, mts2);
-	for (i=0; i<10; i++) {
-		printf("%8x ", genrand_mt(mts0));
-		printf("%8x ", genrand_mt(mts1));
-		printf("%8x ", genrand_mt(mts2));
-	    printf("\n");
+    sgenrand_mt(1234, mts0); /* initialize mts0 with seed 1234 */
+    sgenrand_mt(4567, mts1);
+    sgenrand_mt(8901, mts2);
     /* print output of mts0, mts1, mts2, ten times */
-	}
-	free_mt_struct(mts0);
-	free_mt_struct(mts1);
-	free_mt_struct(mts2);
+    for (i=0; i<10; i++) {
+        printf("%8"PRIx32" ", genrand_mt(mts0));
+        printf("%8"PRIx32" ", genrand_mt(mts1));
+        printf("%8"PRIx32" ", genrand_mt(mts2));
+        printf("\n");
+    }
+    free_mt_struct(mts0);
+    free_mt_struct(mts1);
+    free_mt_struct(mts2);
     return 0;
 }
 

@@ -28,7 +28,7 @@ int main(void)
     }
     for (i=0; i<10; i++) {
 	for (j = 0; j < count; j++) {
-	    printf("%8x ", genrand_mt(mtss[j]));
+	    printf("%8"PRIx32" ", genrand_mt(mtss[j]));
 	}
 	printf("\n");
     }
