@@ -18,12 +18,11 @@ int main(void)
        with period 2^521-1. */
     printf ("get MT parameters.\n");
     /* start_id = 3, max_id = 5 */
-    mtss = get_mt_parameters(32, 521, 20, &count);
+    mtss = get_mt_parameters(32,521,2,&count);
     if (mtss == NULL) {
 	printf ("error\n");
 	return 1;
     }
-    printf("count = %d\n", count);
     for (i = 0; i < count; i++) {
 	sgenrand_mt(seed[i], mtss[i]);
     }

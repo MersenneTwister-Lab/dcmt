@@ -18,7 +18,7 @@ int main(void)
        with period 2^521-1. */
     printf ("get MT parameters.\n");
     /* start_id = 3, max_id = 5 */
-    mtss = get_mt_parameters_st(32,521,1,20,4172, &count);
+    mtss = get_mt_parameters_st(32,521,3,5,4172, &count);
     if (mtss == NULL) {
         printf ("error\n");
         return 1;

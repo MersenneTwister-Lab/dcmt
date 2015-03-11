@@ -1,3 +1,6 @@
+version 0.6.1b
+ License is changed to BSD.
+
 version 0.6.1
  speed improvement using zero-excess initial state. (2010/1/15)
  change print format specifier (2010/1/20)
